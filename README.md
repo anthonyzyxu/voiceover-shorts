@@ -46,6 +46,47 @@ _Two sub-projects passing JSON between steps: Python (trim/transcribe/validate) 
 
 **資料契約**：`transcript.json`（轉錄結果）→ `slides.json`（文案＋時間戳），兩者格式由 `python/schema.py` 定義與驗證。
 
+## 目錄結構 · Project Structure
+
+```
+voiceover-shorts/
+├── README.md                  # 入口 · Entry
+├── LICENSE                    # MIT
+├── CONTRIBUTING.md            # 貢獻指南 · Contributing
+├── CHANGELOG.md               # 版本記錄 · Changelog
+├── CLAUDE.md                  # AI 助手索引 · AI agent index
+├── docs/
+│   ├── design.md              # 設計文件 · Design
+│   └── implementation-plan.md # 實作計畫 · Implementation plan
+├── python/                    # 轉錄＋裁剪 · Transcription & trimming
+│   ├── requirements.txt
+│   ├── schema.py              # 資料契約驗證 · Schema validation
+│   ├── trim.py                # 靜音裁剪 · Silence trimming
+│   ├── transcribe.py          # faster-whisper 轉錄 · Transcription
+│   └── run_pipeline.py        # 管線串接 · Orchestrator
+├── remotion/                  # 渲染 · Rendering (Remotion React)
+│   ├── remotion.config.ts
+│   ├── scripts/
+│   │   ├── check.py           # 關鍵幀自檢 · Keyframe self-check
+│   │   └── render.sh          # 最終渲染 · Render
+│   └── src/
+│       ├── Root.tsx           # Composition 註冊
+│       ├── Video.tsx          # 主合成 · Main composition
+│       ├── components/        # 視覺元件 · Visual components
+│       │   ├── Background.tsx
+│       │   ├── ProgressBar.tsx
+│       │   ├── Slide.tsx
+│       │   └── PiP.tsx
+│       └── lib/               # 純邏輯 · Pure logic
+│           ├── types.ts
+│           ├── timeline.ts    # 時間軸 · Timeline
+│           └── loadData.ts
+└── tests/                     # Python 測試 · Tests
+    ├── test_schema.py
+    ├── test_trim.py
+    └── test_transcribe.py
+```
+
 ## 需求 · Requirements
 
 - **macOS / Linux**，需 **FFmpeg**（含 `ffprobe`）
