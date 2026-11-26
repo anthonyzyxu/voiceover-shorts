@@ -1,4 +1,4 @@
-from trim import compute_cuts, result_after_cuts
+from trim import _duration, _keep_intervals, compute_cuts, cut_video, result_after_cuts
 
 
 def test_no_trim_when_under_max():
@@ -27,3 +27,30 @@ def test_cut_longest_mid_silence_first():
 def test_result_after_cuts():
     assert result_after_cuts(200.0, [(100.0, 110.0)]) == 190.0
     assert result_after_cuts(120.0, []) == 120.0
+
+
+def test_keep_intervals():
+    assert _keep_intervals([(1.0, 2.0)], 3.0) == [(0.0, 1.0), (2.0, 3.0)]
+    assert _keep_intervals([(0.0, 2.0)], 3.0) == [(2.0, 3.0)]
+    assert _keep_intervals([(1.0, 3.0)], 3.0) == [(0.0, 1.0)]
+    assert _keep_intervals([], 3.0) == [(0.0, 3.0)]
+
+
+def test_cut_video_multi_cut(tmp_path):
+    import subprocess
+
+    src = tmp_path / "clip.mp4"
+    subprocess.run(
+        [
+            "ffmpeg", "-y", "-f", "lavfi",
+            "-i", "testsrc=duration=3:size=320x240:rate=30",
+            "-f", "lavfi", "-i", "sine=frequency=1000:duration=3",
+            "-c:v", "libx264", "-c:a", "aac", "-shortest", str(src),
+        ],
+        check=True, capture_output=True,
+    )
+    out = tmp_path / "cut.mp4"
+    cut_video(str(src), str(out), [(0.5, 1.0), (2.0, 2.5)])
+    assert out.exists() and out.stat().st_size > 0
+    d = _duration(str(out))
+    assert 1.8 < d < 2.3, d

@@ -77,6 +77,21 @@ def detect_silence(
     return silences
 
 
+def _keep_intervals(
+    cuts: List[Tuple[float, float]], total_duration: float
+) -> List[Tuple[float, float]]:
+    """由要剪掉的區段推導「保留區間」（互補）。"""
+    keep: List[Tuple[float, float]] = []
+    cursor = 0.0
+    for s, e in sorted(cuts):
+        if s > cursor:
+            keep.append((cursor, s))
+        cursor = max(cursor, e)
+    if cursor < total_duration:
+        keep.append((cursor, total_duration))
+    return keep
+
+
 def cut_video(input_path: str, output_path: str, cuts: List[Tuple[float, float]]) -> None:
     """剪掉 cuts 中的區段，寫出 output_path。無 cuts 時直接 copy。"""
     if not cuts:
@@ -86,9 +101,14 @@ def cut_video(input_path: str, output_path: str, cuts: List[Tuple[float, float]]
         )
         return
 
-    expr = " or ".join(f"between(t,{s},{e})" for s, e in cuts)
-    vf = f"select='not({expr})',setpts=N/FRAME_RATE/TB"
-    af = f"aselect='not({expr})',asetpts=N/SR/TB"
+    keep = _keep_intervals(cuts, _duration(input_path))
+    if not keep:
+        raise RuntimeError("裁剪後無任何保留片段")
+
+    # select 保留「落在任一保留區間」的幀；between 回 0/1，相加即邏輯或。
+    expr = "+".join(f"between(t,{s},{e})" for s, e in keep)
+    vf = f"select='{expr}',setpts=N/FRAME_RATE/TB"
+    af = f"aselect='{expr}',asetpts=N/SR/TB"
     subprocess.run(
         ["ffmpeg", "-y", "-i", input_path,
          "-vf", vf, "-af", af,
