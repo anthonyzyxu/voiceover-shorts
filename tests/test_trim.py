@@ -54,3 +54,14 @@ def test_cut_video_multi_cut(tmp_path):
     assert out.exists() and out.stat().st_size > 0
     d = _duration(str(out))
     assert 1.8 < d < 2.3, d
+
+    # 影音時長須一致（防 VFR 影格被重新等距造成不同步）
+    def stream_dur(sel: str) -> float:
+        r = subprocess.run(
+            ["ffprobe", "-v", "error", "-select_streams", sel,
+             "-show_entries", "stream=duration", "-of", "csv=p=0", str(out)],
+            capture_output=True, text=True,
+        )
+        return float(r.stdout.strip())
+
+    assert abs(stream_dur("v:0") - stream_dur("a:0")) < 0.1

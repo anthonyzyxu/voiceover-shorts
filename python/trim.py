@@ -105,13 +105,24 @@ def cut_video(input_path: str, output_path: str, cuts: List[Tuple[float, float]]
     if not keep:
         raise RuntimeError("裁剪後無任何保留片段")
 
-    # select 保留「落在任一保留區間」的幀；between 回 0/1，相加即邏輯或。
-    expr = "+".join(f"between(t,{s},{e})" for s, e in keep)
-    vf = f"select='{expr}',setpts=N/FRAME_RATE/TB"
-    af = f"aselect='{expr}',asetpts=N/SR/TB"
+    # 用 trim/atrim + concat 逐段裁剪再拼接，保留各段原始 PTS 間距。
+    # 來源為 VFR 時，select+setpts=N/FRAME_RATE/TB 會把影格重新等距，
+    # 造成影音不同步；trim 保留原始時序，才不會讓影片播放變快。
+    n = len(keep)
+    parts = []
+    for i, (s, e) in enumerate(keep):
+        parts.append(f"[0:v]trim=start={s}:end={e},setpts=PTS-STARTPTS[v{i}]")
+        parts.append(f"[0:a]atrim=start={s}:end={e},asetpts=PTS-STARTPTS[a{i}]")
+    v_in = "".join(f"[v{i}]" for i in range(n))
+    a_in = "".join(f"[a{i}]" for i in range(n))
+    parts.append(f"{v_in}concat=n={n}:v=1:a=0[outv]")
+    parts.append(f"{a_in}concat=n={n}:v=0:a=1[outa]")
+    filter_complex = ";".join(parts)
+
     subprocess.run(
         ["ffmpeg", "-y", "-i", input_path,
-         "-vf", vf, "-af", af,
+         "-filter_complex", filter_complex,
+         "-map", "[outv]", "-map", "[outa]",
          "-c:v", "libx264", "-c:a", "aac", output_path],
         check=True,
     )
