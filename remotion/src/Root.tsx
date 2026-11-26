@@ -17,7 +17,12 @@ export const RemotionRoot: React.FC = () => {
       fps={30}
       width={1080}
       height={1920}
-      defaultProps={{slides, transcript, videoSrc: 'input.mov'}}
+      defaultProps={{
+        slides,
+        transcript,
+        videoSrc: 'input.mov',
+        audioSrc: 'input.mov',
+      }}
     />
   );
 };
