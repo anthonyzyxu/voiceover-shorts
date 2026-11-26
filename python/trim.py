@@ -41,6 +41,11 @@ def compute_cuts(
     return cuts
 
 
+def result_after_cuts(total_duration: float, cuts: List[Tuple[float, float]]) -> float:
+    """剪去 cuts 後的最終時長。"""
+    return total_duration - sum(e - s for s, e in cuts)
+
+
 def _duration(path: str) -> float:
     out = subprocess.run(
         ["ffprobe", "-v", "error", "-show_entries", "format=duration",

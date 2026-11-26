@@ -31,6 +31,31 @@ def _extract_audio(input_path: str, wav_path: str) -> None:
     )
 
 
+def _build_transcript(raw_segments, wav_path: str, language: str, model_size: str) -> Transcript:
+    """把 faster-whisper 的 segments 轉成 Transcript；空結果拋 RuntimeError。"""
+    segments: List[dict] = []
+    for seg in raw_segments:
+        words = [
+            {"word": w.word, "start": round(w.start, 3), "end": round(w.end, 3)}
+            for w in (getattr(seg, "words", None) or [])
+        ]
+        segments.append({
+            "id": seg.id,
+            "start": round(seg.start, 3),
+            "end": round(seg.end, 3),
+            "text": seg.text.strip(),
+            "words": words,
+        })
+    if not segments:
+        raise RuntimeError("轉錄結果為空：音軌可能全靜音或無有效語音")
+    return Transcript.model_validate({
+        "audio_file": wav_path,
+        "language": language,
+        "model": model_size,
+        "segments": segments,
+    })
+
+
 def transcribe(
     input_path: str,
     output_json: str,
@@ -48,27 +73,7 @@ def transcribe(
     segments_iter, _info = model.transcribe(
         wav_path, language=language, word_timestamps=True
     )
-
-    segments: List[dict] = []
-    for seg in segments_iter:
-        words = [
-            {"word": w.word, "start": round(w.start, 3), "end": round(w.end, 3)}
-            for w in (getattr(seg, "words", None) or [])
-        ]
-        segments.append({
-            "id": seg.id,
-            "start": round(seg.start, 3),
-            "end": round(seg.end, 3),
-            "text": seg.text.strip(),
-            "words": words,
-        })
-
-    transcript = Transcript.model_validate({
-        "audio_file": wav_path,
-        "language": language,
-        "model": model_size,
-        "segments": segments,
-    })
+    transcript = _build_transcript(segments_iter, wav_path, language, model_size)
 
     with open(output_json, "w", encoding="utf-8") as f:
         json.dump(transcript.model_dump(), f, ensure_ascii=False, indent=2)

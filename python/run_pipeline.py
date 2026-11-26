@@ -11,7 +11,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from transcribe import transcribe  # noqa: E402
-from trim import _duration, compute_cuts, cut_video, detect_silence  # noqa: E402
+from trim import _duration, compute_cuts, cut_video, detect_silence, result_after_cuts  # noqa: E402
 
 
 def main() -> None:
@@ -19,7 +19,11 @@ def main() -> None:
     p.add_argument("input", help="輸入 MOV/音檔路徑")
     p.add_argument("--max-duration", type=float, default=179.0, help="成品時長上限（秒）")
     p.add_argument("--model", default="large-v3", help="faster-whisper 模型")
-    p.add_argument("-o", "--output-json", default="transcript.json")
+    p.add_argument(
+        "-o",
+        "--output-json",
+        default=str(Path(__file__).resolve().parent.parent / "transcript.json"),
+    )
     args = p.parse_args()
 
     input_path = Path(args.input).resolve()
@@ -40,6 +44,13 @@ def main() -> None:
         work_path = trimmed
     else:
         print("      無需裁剪")
+
+    final_duration = result_after_cuts(total, cuts)
+    if final_duration > args.max_duration:
+        print(
+            f"⚠️  警告：剪去所有靜音後仍為 {final_duration:.1f}s，"
+            f"超過上限 {args.max_duration}s；需另行剪內容才能達標。"
+        )
 
     print(f"[2/3] 轉錄（faster-whisper {args.model}）...")
     transcript = transcribe(

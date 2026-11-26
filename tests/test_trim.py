@@ -1,4 +1,4 @@
-from trim import compute_cuts
+from trim import compute_cuts, result_after_cuts
 
 
 def test_no_trim_when_under_max():
@@ -22,3 +22,8 @@ def test_cut_longest_mid_silence_first():
     # 中間兩個靜音 5s 與 30s，需剪到 ≤179 → 先剪 30s 的（剪完 170 已 ≤179）
     cuts = compute_cuts([(50.0, 55.0), (100.0, 130.0)], 200.0)
     assert cuts == [(100.0, 130.0)]
+
+
+def test_result_after_cuts():
+    assert result_after_cuts(200.0, [(100.0, 110.0)]) == 190.0
+    assert result_after_cuts(120.0, []) == 120.0

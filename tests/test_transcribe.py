@@ -2,7 +2,7 @@ import subprocess
 
 import pytest
 
-from transcribe import run_transcribe
+from transcribe import _build_transcript, run_transcribe
 
 
 @pytest.fixture
@@ -24,3 +24,8 @@ def noaudio(tmp_path):
 def test_transcribe_no_audio_stream_raises(noaudio):
     with pytest.raises(RuntimeError):
         run_transcribe(noaudio, "/tmp/out.json", model_size="tiny")
+
+
+def test_build_transcript_empty_raises():
+    with pytest.raises(RuntimeError):
+        _build_transcript([], "audio/input.wav", "zh", "tiny")
