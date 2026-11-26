@@ -157,6 +157,12 @@ cd remotion && npx tsc --noEmit                       # 型別檢查
 
 _For VFR screen recordings, cutting must preserve frame timing (trim/atrim+concat) — the alternative causes A/V desync. Root.tsx loads data via static JSON import, not node:fs._
 
+## 相關文件 · Docs
+
+- [設計文件](docs/design.md) — 完整規格與設計決策 · _Design & decisions_
+- [實作計畫](docs/implementation-plan.md) — 任務分解記錄 · _Implementation plan_
+- [貢獻指南](CONTRIBUTING.md) · [版本記錄](CHANGELOG.md)
+
 ## 授權 · License
 
 [MIT](LICENSE)

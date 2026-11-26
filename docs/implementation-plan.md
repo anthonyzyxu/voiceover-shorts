@@ -1,6 +1,6 @@
 # 口播＋動態 PPT 文案背景 視頻自動包裝管線 實作計畫
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> 本計畫已於 2026-11-26 全部實作完成；保留原始任務分解，供理解設計決策。
 
 **Goal:** 把一支口播 MOV 自動包裝成 1080×1920 豎版短視頻（≤2:59）：faster-whisper 轉錄 → Claude 提煉 PPT 文案 → Remotion 動態排版＋畫中畫合成 → 自檢渲染。
 
@@ -8,7 +8,7 @@
 
 **Tech Stack:** Python（faster-whisper、pydantic、ffmpeg）、Node/Remotion（React、TypeScript、vitest）。
 
-**Spec:** `docs/superpowers/specs/2026-11-26-voiceover-ppt-video-design.md`
+**Spec:** `docs/design.md`
 
 ## Global Constraints
 
@@ -37,8 +37,8 @@
 ```
 project_video_aienhanced/
 ├── 任務.md
-├── docs/superpowers/specs/…design.md
-├── docs/superpowers/plans/…plan.md
+├── docs/design.md
+├── docs/implementation-plan.md
 ├── .gitignore
 ├── python/
 │   ├── requirements.txt        # faster-whisper, pydantic

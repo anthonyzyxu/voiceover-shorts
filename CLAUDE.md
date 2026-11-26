@@ -39,7 +39,7 @@ DATE=... THEME=... bash scripts/render.sh        # 輸出 output/日期-主題.m
 ## 參考文件
 
 - 環境安裝／用法／資料格式：`README.md`
-- 完整規格與設計決策：`docs/superpowers/specs/2026-11-26-voiceover-ppt-video-design.md`
+- 完整規格與設計決策：`docs/design.md`
 
 ## 測試
 

@@ -1,7 +1,7 @@
 # 設計文件：口播＋動態 PPT 文案背景 視頻自動包裝管線
 
 日期：2026-11-26
-狀態：待審核
+狀態：已批准
 
 ## 1. 意圖（Intent & Why）
 
@@ -155,7 +155,7 @@
 ### 待定（取得實檔後決定）
 - 畫中畫的裁剪區域與縮放比例（取決於 `input.mov` 的解析度與長寬比）。
 
-## 8. 環境初始化（實作的第一步，待審核後執行）
+## 8. 環境初始化（已於實作完成）
 1. Python：建立 `venv`，`pip install faster-whisper`，首次執行自動下載 `large-v3`（約 3GB）。
 2. Node：在專案內初始化 Remotion React 專案（`@remotion/cli`、`remotion`、React 依賴）。
 3. 驗證：跑通「抽音頻 → 轉錄 → 出 `transcript.json`」的最小閉環。
