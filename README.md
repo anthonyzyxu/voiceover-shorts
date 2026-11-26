@@ -2,6 +2,11 @@
 
 **口播影片自動包裝管線** · _Voiceover Video Packaging Pipeline_
 
+> 🤖 **給 AI Agent 用家**：對你的 agent 說這一句，它就會自己讀文件開始幹活：
+> 「讀 `README.md` 和 `CLAUDE.md`，然後幫我處理這支口播影片：`/path/to/input.mov`」
+>
+> _For AI-agent users: paste this one line and the agent reads the docs and gets to work — "Read `README.md` and `CLAUDE.md`, then process this talking-head video: `/path/to/input.mov`."_
+
 把一支口播 MOV 自動包裝成 **1080×1920 豎版短視頻（≤2:59）**：動態 PPT 知識卡片風格的文案背景＋人物畫中畫，文字動畫全程對齊人聲時間軸。
 
 _Turn a talking-head MOV into a **1080×1920 vertical short video (≤2:59)** — animated "PPT knowledge-card" text background plus a picture-in-picture of the speaker, with text animations synced to the voice timeline._
