@@ -1,0 +1,15 @@
+# 輸入與成品（每次皆新，不入庫）
+*.mov
+*.mp4
+*.wav
+audio/
+output/
+# 每次執行的資料產物
+transcript.json
+slides.json
+# 環境
+python/.venv/
+__pycache__/
+remotion/node_modules/
+remotion/.cache/
+.DS_Store
