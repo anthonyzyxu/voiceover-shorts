@@ -1,3 +1,4 @@
+import React from 'react';
 import {registerRoot} from 'remotion';
 
 // Placeholder — real <Composition> is wired in Task 7.
