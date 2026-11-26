@@ -46,7 +46,7 @@ export const Slide: React.FC<{slide: SlideData; t: number}> = ({slide, t}) => {
 
   const titleP = anim(t, slide.start, 0.5);
   const titleStyle: React.CSSProperties = {
-    fontSize: 76,
+    fontSize: 64,
     fontWeight: 700,
     lineHeight: 1.25,
     color: '#1f2a44',
@@ -74,8 +74,8 @@ export const Slide: React.FC<{slide: SlideData; t: number}> = ({slide, t}) => {
               style={{
                 display: 'flex',
                 alignItems: 'flex-start',
-                marginBottom: 36,
-                fontSize: 50,
+                marginBottom: 30,
+                fontSize: 40,
                 fontWeight: 500,
                 lineHeight: 1.4,
                 color: '#2c3a5c',

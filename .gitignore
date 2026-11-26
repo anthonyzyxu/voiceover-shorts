@@ -15,3 +15,4 @@ remotion/.cache/
 .DS_Store
 .pytest_cache/
 remotion/out/
+remotion/.vitest/
