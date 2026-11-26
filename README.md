@@ -1,4 +1,6 @@
-# 口播影片自動包裝管線 · Voiceover Video Packaging Pipeline
+# voiceover-shorts
+
+**口播影片自動包裝管線** · _Voiceover Video Packaging Pipeline_
 
 把一支口播 MOV 自動包裝成 **1080×1920 豎版短視頻（≤2:59）**：動態 PPT 知識卡片風格的文案背景＋人物畫中畫，文字動畫全程對齊人聲時間軸。
 
