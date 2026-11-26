@@ -1,7 +1,4 @@
-import React from 'react';
 import {registerRoot} from 'remotion';
+import {RemotionRoot} from './Root';
 
-// Placeholder — real <Composition> is wired in Task 7.
-const Root: React.FC = () => null;
-
-registerRoot(Root);
+registerRoot(RemotionRoot);
